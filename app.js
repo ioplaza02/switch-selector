@@ -60,7 +60,7 @@ function emptyFilters() {
     poePlus: false,
     poeTotalMin: null,
     features: new Set(),
-    temp50: false,
+    tempRanges: new Set(),
     fanless: false,
     internalPower: false,
     metal: false,
@@ -237,10 +237,20 @@ function buildFilterPanel() {
   // ③ PoE（給電）
   const poe = section("poe", "PoE（給電）", () =>
     (filters.poe ? 1 : 0) + (filters.poePlus ? 1 : 0) + (filters.poeTotalMin ? 1 : 0));
-  poe.appendChild(checkOption("PoE給電あり", "LANケーブル1本で、カメラや無線アクセスポイントに電気も送れる", filters.poe, v => { filters.poe = v; }));
-  poe.appendChild(checkOption("PoE+（1ポート最大30W）対応", "消費電力の大きいカメラ・アクセスポイント向け（IEEE802.3at）", filters.poePlus, v => { filters.poePlus = v; }));
-  poe.appendChild(subTitle("総給電量", "つなぐ機器の消費電力の合計で選ぶ"));
-  poe.appendChild(pillSingle(POE_TOTAL_STEPS, () => filters.poeTotalMin, v => { filters.poeTotalMin = v; }));
+  // 「PoE給電あり」を選んだときだけ、その先の条件（PoE+・総給電量）を出す。
+  // PoEを外したら、その先の条件も一緒に解除する（見えない条件が残らないように）。
+  poe.appendChild(checkOption("PoE給電あり", "LANケーブル1本で、カメラや無線アクセスポイントに電気も送れる", filters.poe, v => {
+    filters.poe = v;
+    if (!v) { filters.poePlus = false; filters.poeTotalMin = null; }
+    buildFilterPanel();
+  }));
+  if (filters.poe) {
+    const poeSub = el("div", "filter-nested");
+    poeSub.appendChild(checkOption("PoE+（1ポート最大30W）対応", "消費電力の大きいカメラ・アクセスポイント向け（IEEE802.3at）", filters.poePlus, v => { filters.poePlus = v; }));
+    poeSub.appendChild(subTitle("総給電量", "つなぐ機器の消費電力の合計で選ぶ"));
+    poeSub.appendChild(pillSingle(POE_TOTAL_STEPS, () => filters.poeTotalMin, v => { filters.poeTotalMin = v; }));
+    poe.appendChild(poeSub);
+  }
   panel.appendChild(poe);
 
   // ④ 高機能
@@ -253,9 +263,12 @@ function buildFilterPanel() {
 
   // ⑤ 設置・環境
   const env = section("environment", "設置・環境", () =>
-    (filters.temp50 ? 1 : 0) + (filters.fanless ? 1 : 0) + (filters.internalPower ? 1 : 0) + (filters.metal ? 1 : 0) + filters.install.size);
-  env.appendChild(subTitle("動作温度"));
-  env.appendChild(checkOption("50℃まで動作", "倉庫・工場・夏場に閉め切る部屋など、暑くなる場所向け（通常は40℃まで）", filters.temp50, v => { filters.temp50 = v; }));
+    filters.tempRanges.size + (filters.fanless ? 1 : 0) + (filters.internalPower ? 1 : 0) + (filters.metal ? 1 : 0) + filters.install.size);
+  // 使用温度範囲は、実データにある範囲（例：0〜40℃、0〜50℃）をそのまま選択肢にする
+  const tempKeys = [...new Set(allProducts.map(tempKey).filter(Boolean))]
+    .sort((a, b) => tempMax(a) - tempMax(b) || tempMin(a) - tempMin(b));
+  env.appendChild(subTitle("使用温度範囲", "倉庫・工場・夏場に閉め切る部屋など、暑くなる場所なら上限50℃の機種を（複数選択可）"));
+  env.appendChild(pillGroup(tempKeys, filters.tempRanges, k => tempMin(k) + "〜" + tempMax(k) + "℃"));
   env.appendChild(subTitle("本体の特長"));
   env.appendChild(checkOption("ファンレス（静音）", "冷却ファンが無く、音が静かでホコリにも強い", filters.fanless, v => { filters.fanless = v; }));
   env.appendChild(checkOption("電源内蔵", "ACアダプター不要。コンセント周りがすっきり", filters.internalPower, v => { filters.internalPower = v; }));
@@ -314,7 +327,7 @@ function matchesFilters(p) {
   for (const f of filters.features) {
     if (!(p.features || []).includes(f)) return false;
   }
-  if (filters.temp50 && !(p.tempMaxC != null && p.tempMaxC >= 50)) return false;
+  if (filters.tempRanges.size && !filters.tempRanges.has(tempKey(p))) return false;
   if (filters.fanless && p.fanless !== true) return false;
   if (filters.internalPower && p.power !== "内蔵電源") return false;
   if (filters.metal && p.housing !== "金属") return false;
@@ -335,6 +348,23 @@ function visibleProducts() {
 // ---------------------------------------------------------------------------
 // 表示
 // ---------------------------------------------------------------------------
+
+// 使用温度範囲。tempMinC（下限）が無い古いデータでも、公式表記の文字列（例「0～+40℃」）から読み取る
+function productTempMin(p) {
+  if (p.tempMinC != null) return p.tempMinC;
+  const m = String(p.tempText || "").normalize("NFKC").match(/(-?\d+)\s*[~～〜]/);
+  return m ? Number(m[1]) : null;
+}
+function tempKey(p) {
+  const min = productTempMin(p);
+  return (min != null && p.tempMaxC != null) ? min + "_" + p.tempMaxC : null;
+}
+function tempMin(key) { return Number(String(key).split("_")[0]); }
+function tempMax(key) { return Number(String(key).split("_")[1]); }
+function tempLabel(p) {
+  const k = tempKey(p);
+  return k ? tempMin(k) + "〜" + tempMax(k) + "℃" : (p.tempText || null);
+}
 
 function fmtPrice(p) {
   if (p.priceIncTax != null) return "¥" + p.priceIncTax.toLocaleString();
@@ -463,7 +493,7 @@ function productCard(p) {
 
   const specLine = el("ul", "spec-line");
   [
-    p.tempMaxC != null ? "動作温度 0〜" + p.tempMaxC + "℃" : null,
+    tempKey(p) ? "使用温度範囲 " + tempLabel(p) : null,
     p.fanless === true ? "ファンレス" : null,
     p.power,
     p.warrantyYears != null ? p.warrantyYears + "年保証" : null,
@@ -530,10 +560,10 @@ function openCompare() {
   ];
   const featureRows = FEATURE_OPTIONS.map(f => [f.value, p => yesNo((p.features || []).includes(f.value))]);
   const envRows = [
-    ["動作温度", p => p.tempText || (p.tempMaxC != null ? "0〜" + p.tempMaxC + "℃" : null)],
+    ["使用温度範囲", p => tempLabel(p)],
     ["ファン", p => p.fanless === true ? "ファンレス" : p.fanless === false ? "ファンあり" : "記載なし"],
     ["電源", p => p.power],
-    ["設置方法", p => (p.install && p.install.length) ? p.install.join(" / ") : "卓上のみ"],
+    ["設置方法", p => (p.install && p.install.length) ? p.install.join(" / ") : "記載なし"],
     ["筐体", p => p.housing || "－"],
     ["保証", p => p.warrantyYears != null ? p.warrantyYears + "年保証" : null]
   ];

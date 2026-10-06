@@ -26,9 +26,12 @@ body {
   line-height: 1.6;
 }
 
-/* ---- ヘッダー（NASセレクターと同じ青い帯） ---- */
+/* ---- ヘッダー（NASセレクターの青と区別するため、やさしいアプリコット色の帯。
+   他社のイメージカラーの赤は避け、暖色でもオレンジ寄りの淡い色にとどめる。
+   文字はこげ茶にして、背景とのコントラストを十分に確保する） ---- */
 .brand-banner {
-  background: linear-gradient(120deg, #0b2f7a 0%, #1a56c4 55%, #2f6fe0 100%);
+  background: linear-gradient(120deg, #fdf0e2 0%, #f9dcc0 55%, #f4c9a0 100%);
+  border-bottom: 1px solid #e9bf95;
   padding: 22px 24px;
   display: flex;
   align-items: center;
@@ -36,9 +39,9 @@ body {
   flex-wrap: wrap;
 }
 .brand-banner__badge {
-  background: rgba(255,255,255,0.14);
-  border: 1px solid rgba(255,255,255,0.35);
-  color: #fff;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid #d99e68;
+  color: #7a3d0e;
   font-size: 13px;
   font-weight: 600;
   padding: 4px 14px;
@@ -46,7 +49,7 @@ body {
   letter-spacing: 0.02em;
 }
 .brand-banner__title {
-  color: #fff;
+  color: #5b2c0a;
   font-size: 24px;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -156,6 +159,13 @@ details[open] > .filter-group__label::before { transform: rotate(90deg); }
 .check-option__text { display: flex; flex-direction: column; }
 .check-option__title { font-size: 13px; }
 .check-option__note { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+.filter-nested {
+  margin: 4px 0 4px 22px;
+  padding: 2px 0 6px 4px;
+  border-left: 2px solid var(--accent-bg);
+}
+.filter-nested .filter-sub, .filter-nested .pill-row, .filter-nested .check-option { padding-left: 8px; margin-left: 0; }
 
 .filter-reset {
   width: 100%; margin-top: 14px; padding: 8px; font-size: 13px;
