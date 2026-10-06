@@ -1,130 +1,11 @@
 {
-  "updatedAt": "2026-10-05T05:53:59.128Z",
+  "updatedAt": "2026-10-06T00:42:16.598Z",
   "source": [
-    "初期データ（公式サイトの仕様ページを手作業で確認したもの）"
+    "https://www.iodata.jp/product/lan/hub/",
+    "https://www.iodata.jp/product/lan/switch/",
+    "https://www.iodata.jp/product/lan/poe/"
   ],
   "switches": [
-    {
-      "id": "etx-esh08kc",
-      "sku": "ETX-ESH08KC",
-      "series": "etx-esh08c",
-      "name": "100BASE-TX／10BASE-Te対応 8ポート レイヤー2スイッチングハブ",
-      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etx-esh08c/index.htm",
-      "imageUrl": "https://www.iodata.jp/product/lan/hub/etx-esh08/12dh9400001rhuw2-img/12dh9400001rhv14.jpg",
-      "status": "生産終了",
-      "priceIncTax": 2970,
-      "priceText": null,
-      "jan": "4957180137841",
-      "ports": 8,
-      "speed": "100M",
-      "speedNote": null,
-      "sfp": null,
-      "management": "アンマネージ",
-      "poe": null,
-      "features": [
-        "省電力（EEE）"
-      ],
-      "featureNote": null,
-      "tempText": "0～40℃",
-      "tempMaxC": 40,
-      "fanless": true,
-      "power": "ACアダプター",
-      "install": [
-        "壁掛け"
-      ],
-      "housing": null,
-      "warrantyYears": 1,
-      "vcci": "B",
-      "usage": "家庭・SOHO向け",
-      "specDetails": {
-        "fabric": "1.6Gbps",
-        "macTable": null,
-        "buffer": "96kbytes",
-        "powerConsumption": "2.0W（Typ）",
-        "dimensions": "約150（W）×80（D）×30（H）mm",
-        "weight": "約140g"
-      }
-    },
-    {
-      "id": "etx-esh08wc",
-      "sku": "ETX-ESH08WC",
-      "series": "etx-esh08c",
-      "name": "100BASE-TX／10BASE-Te対応 8ポート レイヤー2スイッチングハブ",
-      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etx-esh08c/index.htm",
-      "imageUrl": "https://www.iodata.jp/product/lan/hub/etx-esh08/12dh9400001rhuw2-img/12dh9400001rhv14.jpg",
-      "status": "現行",
-      "priceIncTax": 2970,
-      "priceText": null,
-      "jan": "4957180137858",
-      "ports": 8,
-      "speed": "100M",
-      "speedNote": null,
-      "sfp": null,
-      "management": "アンマネージ",
-      "poe": null,
-      "features": [
-        "省電力（EEE）"
-      ],
-      "featureNote": null,
-      "tempText": "0～40℃",
-      "tempMaxC": 40,
-      "fanless": true,
-      "power": "ACアダプター",
-      "install": [
-        "壁掛け"
-      ],
-      "housing": null,
-      "warrantyYears": 1,
-      "vcci": "B",
-      "usage": "家庭・SOHO向け",
-      "specDetails": {
-        "fabric": "1.6Gbps",
-        "macTable": null,
-        "buffer": "96kbytes",
-        "powerConsumption": "2.0W（Typ）",
-        "dimensions": "約150（W）×80（D）×30（H）mm",
-        "weight": "約140g"
-      }
-    },
-    {
-      "id": "etx-esh05wd",
-      "sku": "ETX-ESH05WD",
-      "series": "etx-esh05wd",
-      "name": "100BASE-TX／10BASE-Te対応 5ポート レイヤー2スイッチングハブ",
-      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etx-esh05wd/index.htm",
-      "imageUrl": "https://www.iodata.jp/image/etx-esh05wd_l.jpg",
-      "status": "現行",
-      "priceIncTax": 2750,
-      "priceText": null,
-      "jan": "4957180171388",
-      "ports": 5,
-      "speed": "100M",
-      "speedNote": null,
-      "sfp": null,
-      "management": "アンマネージ",
-      "poe": null,
-      "features": [
-        "省電力（EEE）"
-      ],
-      "featureNote": null,
-      "tempText": "0～40℃",
-      "tempMaxC": 40,
-      "fanless": true,
-      "power": "ACアダプター",
-      "install": [],
-      "housing": null,
-      "warrantyYears": 1,
-      "vcci": "B",
-      "usage": "家庭・SOHO向け",
-      "specDetails": {
-        "fabric": "1Gbps",
-        "macTable": null,
-        "buffer": "48kbytes",
-        "powerConsumption": "1.4W（Typ）",
-        "dimensions": "約89（W）×66（D）×25（H）mm",
-        "weight": "約85g"
-      }
-    },
     {
       "id": "bsh-cp210",
       "sku": "BSH-CP210",
@@ -169,32 +50,71 @@
       "usage": "法人向け",
       "specDetails": {
         "fabric": "5.6Gbps",
-        "macTable": null,
-        "buffer": null,
-        "powerConsumption": "140W（typ）：120W給電時／4.0W（typ）：PoE給電なし",
-        "dimensions": "約220（W）× 150（D）× 44（H）mm",
+        "macTable": "8,192",
+        "buffer": "最大 4Mbit",
+        "powerConsumption": "140W（typ）：120W給電時 4.0W（typ）：PoE給電なし",
+        "dimensions": "約220（W）&times; 150（D）&times; 44（H）mm ※ゴム足、突起部を含まず",
         "weight": "約1.3 kg"
       }
     },
     {
-      "id": "etg-esh05um",
-      "sku": "ETG-ESH05UM",
-      "series": "etg-eshum",
-      "name": "Gigabit対応小型アンマネージスイッチングハブ",
-      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etg-eshum/index.htm",
-      "imageUrl": "https://www.iodata.jp/image/etg-eshum_l.jpg",
+      "id": "etx-esh05wd",
+      "sku": "ETX-ESH05WD",
+      "series": "etx-esh05wd",
+      "name": "100BASE-TX／10BASE-Te対応 5ポート レイヤー2スイッチングハブ",
+      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etx-esh05wd/index.htm",
+      "imageUrl": "https://www.iodata.jp/image/etx-esh05wd_l.jpg",
       "status": "現行",
-      "priceIncTax": null,
-      "priceText": "オープン価格",
-      "jan": "4957180190310",
+      "priceIncTax": 2750,
+      "priceText": null,
+      "jan": "4957180171388",
       "ports": 5,
-      "speed": "1G",
+      "speed": "100M",
       "speedNote": null,
       "sfp": null,
       "management": "アンマネージ",
       "poe": null,
       "features": [
-        "ジャンボフレーム"
+        "省電力（EEE）"
+      ],
+      "featureNote": null,
+      "tempText": "0～40℃",
+      "tempMaxC": 40,
+      "fanless": true,
+      "power": "ACアダプター",
+      "install": [],
+      "housing": null,
+      "warrantyYears": 1,
+      "vcci": "B",
+      "usage": "家庭・SOHO向け",
+      "specDetails": {
+        "fabric": "1Gbps",
+        "macTable": "2048エントリ（エージングタイム 300秒）",
+        "buffer": "48kbytes",
+        "powerConsumption": "1.4W（Typ）",
+        "dimensions": "約89（W）&times;66（D）&times;25（H）mm",
+        "weight": "約85g"
+      }
+    },
+    {
+      "id": "etx-esh08kc",
+      "sku": "ETX-ESH08KC",
+      "series": "etx-esh08c",
+      "name": "100BASE-TX／10BASE-Te対応 8ポート レイヤー2スイッチングハブ",
+      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etx-esh08c/index.htm",
+      "imageUrl": "https://www.iodata.jp/product/lan/hub/etx-esh08/12dh9400001rhuw2-img/12dh9400001rhv14.jpg",
+      "status": "生産終了",
+      "priceIncTax": 2970,
+      "priceText": null,
+      "jan": "4957180137841",
+      "ports": 8,
+      "speed": "100M",
+      "speedNote": null,
+      "sfp": null,
+      "management": "アンマネージ",
+      "poe": null,
+      "features": [
+        "省電力（EEE）"
       ],
       "featureNote": null,
       "tempText": "0～40℃",
@@ -202,40 +122,40 @@
       "fanless": true,
       "power": "ACアダプター",
       "install": [
-        "マグネット"
+        "壁掛け"
       ],
       "housing": null,
       "warrantyYears": 1,
       "vcci": "B",
       "usage": "家庭・SOHO向け",
       "specDetails": {
-        "fabric": "10Gbps",
-        "macTable": "2048",
-        "buffer": "1MBit",
-        "powerConsumption": "1.6W（typ）",
-        "dimensions": "約88（W）×53（D）×23（H）mm",
-        "weight": "約67g"
+        "fabric": "1.6Gbps",
+        "macTable": "2048エントリ（エージングタイム 300秒）",
+        "buffer": "96kbytes",
+        "powerConsumption": "2.0W（Typ）",
+        "dimensions": "約150（W）&times;80（D）&times;30（H）mm",
+        "weight": "約140g"
       }
     },
     {
-      "id": "etg-esh08um",
-      "sku": "ETG-ESH08UM",
-      "series": "etg-eshum",
-      "name": "Gigabit対応小型アンマネージスイッチングハブ",
-      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etg-eshum/index.htm",
-      "imageUrl": "https://www.iodata.jp/image/etg-eshum_l.jpg",
+      "id": "etx-esh08wc",
+      "sku": "ETX-ESH08WC",
+      "series": "etx-esh08c",
+      "name": "100BASE-TX／10BASE-Te対応 8ポート レイヤー2スイッチングハブ",
+      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etx-esh08c/index.htm",
+      "imageUrl": "https://www.iodata.jp/product/lan/hub/etx-esh08/12dh9400001rhuw2-img/12dh9400001rhv14.jpg",
       "status": "現行",
-      "priceIncTax": null,
-      "priceText": "オープン価格",
-      "jan": "4957180190327",
+      "priceIncTax": 2970,
+      "priceText": null,
+      "jan": "4957180137858",
       "ports": 8,
-      "speed": "1G",
+      "speed": "100M",
       "speedNote": null,
       "sfp": null,
       "management": "アンマネージ",
       "poe": null,
       "features": [
-        "ジャンボフレーム"
+        "省電力（EEE）"
       ],
       "featureNote": null,
       "tempText": "0～40℃",
@@ -243,155 +163,19 @@
       "fanless": true,
       "power": "ACアダプター",
       "install": [
-        "マグネット"
+        "壁掛け"
       ],
       "housing": null,
       "warrantyYears": 1,
       "vcci": "B",
       "usage": "家庭・SOHO向け",
       "specDetails": {
-        "fabric": "16Gbps",
-        "macTable": "4096",
-        "buffer": "1.5MBit",
-        "powerConsumption": "2.4W（Typ）",
-        "dimensions": "約138（W）×62（D）×23（H）mm",
-        "weight": "約120g"
-      }
-    },
-    {
-      "id": "etg-esh08lm",
-      "sku": "ETG-ESH08LM",
-      "series": "etg-esh08lm",
-      "name": "ループ検知・防止機能搭載L2スイッチングハブ",
-      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etg-esh08lm/index.htm",
-      "imageUrl": "https://www.iodata.jp/image/etg-esh08lm_l.jpg",
-      "status": "現行",
-      "priceIncTax": 8580,
-      "priceText": null,
-      "jan": "4957180171081",
-      "ports": 8,
-      "speed": "1G",
-      "speedNote": null,
-      "sfp": null,
-      "management": "ライトマネージ",
-      "poe": null,
-      "features": [
-        "ループ検知・防止",
-        "ジャンボフレーム",
-        "省電力（EEE）"
-      ],
-      "featureNote": null,
-      "tempText": "0～50℃",
-      "tempMaxC": 50,
-      "fanless": true,
-      "power": "内蔵電源",
-      "install": [
-        "マグネット",
-        "壁掛け"
-      ],
-      "housing": "金属",
-      "warrantyYears": 3,
-      "vcci": "B",
-      "usage": "家庭・SOHO向け",
-      "specDetails": {
-        "fabric": "16Gbps（ノンブロッキング）",
-        "macTable": "8192",
-        "buffer": "512kbytes",
-        "powerConsumption": "4.0W（Typ）",
-        "dimensions": "約198（W）×85（D）×30（H）mm",
-        "weight": "約440g"
-      }
-    },
-    {
-      "id": "etg-esh16lm",
-      "sku": "ETG-ESH16LM",
-      "series": "etg-eshlm",
-      "name": "L2ライトマネージスイッチングハブ",
-      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etg-eshlm/index.htm",
-      "imageUrl": "https://www.iodata.jp/image/etg-eshlm_l.jpg",
-      "status": "現行",
-      "priceIncTax": 16280,
-      "priceText": null,
-      "jan": "4957180171098",
-      "ports": 16,
-      "speed": "1G",
-      "speedNote": null,
-      "sfp": null,
-      "management": "ライトマネージ",
-      "poe": null,
-      "features": [
-        "ループ検知・防止",
-        "VLAN",
-        "リンクアグリゲーション",
-        "ジャンボフレーム",
-        "省電力（EEE）"
-      ],
-      "featureNote": "ループ検知・防止、ポートVLAN、リンクアグリゲーションは排他利用となります。",
-      "tempText": "0～50℃",
-      "tempMaxC": 50,
-      "fanless": true,
-      "power": "内蔵電源",
-      "install": [
-        "ラックマウント",
-        "壁掛け"
-      ],
-      "housing": "金属",
-      "warrantyYears": 3,
-      "vcci": "A",
-      "usage": "法人向け",
-      "specDetails": {
-        "fabric": "32Gbps",
-        "macTable": "8192（エージングタイム：300秒）",
-        "buffer": "512kbytes",
-        "powerConsumption": "8.0W（Typ）",
-        "dimensions": "約290（W）×180（D）×44（H）mm",
-        "weight": "約1.4 kg"
-      }
-    },
-    {
-      "id": "etg-esh24lm",
-      "sku": "ETG-ESH24LM",
-      "series": "etg-eshlm",
-      "name": "L2ライトマネージスイッチングハブ",
-      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etg-eshlm/index.htm",
-      "imageUrl": "https://www.iodata.jp/image/etg-eshlm_l.jpg",
-      "status": "現行",
-      "priceIncTax": 23980,
-      "priceText": null,
-      "jan": "4957180171104",
-      "ports": 24,
-      "speed": "1G",
-      "speedNote": null,
-      "sfp": null,
-      "management": "ライトマネージ",
-      "poe": null,
-      "features": [
-        "ループ検知・防止",
-        "VLAN",
-        "リンクアグリゲーション",
-        "ジャンボフレーム",
-        "省電力（EEE）"
-      ],
-      "featureNote": "ループ検知・防止、ポートVLAN、リンクアグリゲーションは排他利用となります。",
-      "tempText": "0～50℃",
-      "tempMaxC": 50,
-      "fanless": true,
-      "power": "内蔵電源",
-      "install": [
-        "ラックマウント",
-        "壁掛け"
-      ],
-      "housing": "金属",
-      "warrantyYears": 3,
-      "vcci": "A",
-      "usage": "法人向け",
-      "specDetails": {
-        "fabric": "48Gbps",
-        "macTable": "8192（エージングタイム：300秒）",
-        "buffer": "512kbytes",
-        "powerConsumption": "12W（Typ）",
-        "dimensions": "約290（W）×180（D）×44（H）mm",
-        "weight": "約1.5 kg"
+        "fabric": "1.6Gbps",
+        "macTable": "2048エントリ（エージングタイム 300秒）",
+        "buffer": "96kbytes",
+        "powerConsumption": "2.0W（Typ）",
+        "dimensions": "約150（W）&times;80（D）&times;30（H）mm",
+        "weight": "約140g"
       }
     },
     {
@@ -438,10 +222,10 @@
       "usage": "法人向け",
       "specDetails": {
         "fabric": "16Gbps（ノンブロッキング）",
-        "macTable": "8,192エントリ",
-        "buffer": null,
+        "macTable": "8,192エントリ（エージングタイム300秒）",
+        "buffer": "512Kbytes",
         "powerConsumption": "6.1W（Typ）",
-        "dimensions": "約216（W）×133（D）×42（H）mm",
+        "dimensions": "約216（W）&times;133（D）&times;42（H）mm※突起部含まず",
         "weight": "約870g"
       }
     },
@@ -490,10 +274,10 @@
       "usage": "法人向け",
       "specDetails": {
         "fabric": "32Gbps（ノンブロッキング）",
-        "macTable": "8,192エントリ",
-        "buffer": null,
+        "macTable": "8,192エントリ（エージングタイム300秒）",
+        "buffer": "512Kbytes",
         "powerConsumption": "10W（Typ）",
-        "dimensions": "約216（W）×133（D）×42（H）mm",
+        "dimensions": "約216（W）&times;133（D）&times;42（H）mm※突起部含まず",
         "weight": "約990g"
       }
     },
@@ -541,10 +325,10 @@
       "usage": "法人向け",
       "specDetails": {
         "fabric": "48Gbps（ノンブロッキング）",
-        "macTable": "8,192エントリ",
-        "buffer": null,
+        "macTable": "8,192エントリ（エージングタイム300秒）",
+        "buffer": "512Kbytes",
         "powerConsumption": "14W（Typ）",
-        "dimensions": "約267（W）×162（D）×42（H）mm",
+        "dimensions": "約267（W）&times;162（D）&times;42（H）mm※突起部含まず",
         "weight": "約1.7kg"
       }
     },
@@ -600,10 +384,10 @@
       "usage": "法人向け",
       "specDetails": {
         "fabric": "16Gbps（ノンブロッキング）",
-        "macTable": null,
-        "buffer": null,
+        "macTable": "8,192エントリ（エージングタイム300秒）",
+        "buffer": "512Kbytes",
         "powerConsumption": "110W（Typ）",
-        "dimensions": "約265（W）×184（D）×44（H）mm",
+        "dimensions": "約265（W）&times;184（D）&times;44（H）mm ※突起部含まず",
         "weight": "約1.7kg"
       }
     },
@@ -648,12 +432,230 @@
       "vcci": "A",
       "usage": "法人向け",
       "specDetails": {
-        "fabric": "20Gbps",
-        "macTable": null,
-        "buffer": null,
-        "powerConsumption": "71W（typ）：60W給電時、5.4W（typ）：PoE給電なし",
-        "dimensions": "約168（W）× 94（D）× 32（H）mm",
+        "fabric": "20Gbps ※接続方法によっては制限される場合があります",
+        "macTable": "2,048",
+        "buffer": "最大2Mbit",
+        "powerConsumption": "71W（typ）：60W給電時 5.4W（typ）：PoE給電なし",
+        "dimensions": "約168（W）&times; 94（D）&times; 32（H）mm ※ゴム足、突起部を含まず",
         "weight": "約520g"
+      }
+    },
+    {
+      "id": "etg-esh08lm",
+      "sku": "ETG-ESH08LM",
+      "series": "etg-esh08lm",
+      "name": "ループ検知・防止機能搭載L2スイッチングハブ",
+      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etg-esh08lm/index.htm",
+      "imageUrl": "https://www.iodata.jp/image/etg-esh08lm_l.jpg",
+      "status": "現行",
+      "priceIncTax": 8580,
+      "priceText": null,
+      "jan": "4957180171081",
+      "ports": 8,
+      "speed": "1G",
+      "speedNote": null,
+      "sfp": null,
+      "management": "ライトマネージ",
+      "poe": null,
+      "features": [
+        "ループ検知・防止",
+        "ジャンボフレーム",
+        "省電力（EEE）"
+      ],
+      "featureNote": null,
+      "tempText": "0～50℃",
+      "tempMaxC": 50,
+      "fanless": true,
+      "power": "内蔵電源",
+      "install": [
+        "マグネット",
+        "壁掛け"
+      ],
+      "housing": "金属",
+      "warrantyYears": 3,
+      "vcci": "B",
+      "usage": "家庭・SOHO向け",
+      "specDetails": {
+        "fabric": "16Gbps（ノンブロッキング）",
+        "macTable": "8192",
+        "buffer": "512kbytes",
+        "powerConsumption": "4.0W（Typ）",
+        "dimensions": "約198（W）&times;85（D）&times;30（H）mm ※突起部を含まず",
+        "weight": "約440g"
+      }
+    },
+    {
+      "id": "etg-esh16lm",
+      "sku": "ETG-ESH16LM",
+      "series": "etg-eshlm",
+      "name": "L2ライトマネージスイッチングハブ",
+      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etg-eshlm/index.htm",
+      "imageUrl": "https://www.iodata.jp/image/etg-eshlm_l.jpg",
+      "status": "現行",
+      "priceIncTax": 16280,
+      "priceText": null,
+      "jan": "4957180171098",
+      "ports": 16,
+      "speed": "1G",
+      "speedNote": null,
+      "sfp": null,
+      "management": "ライトマネージ",
+      "poe": null,
+      "features": [
+        "ループ検知・防止",
+        "VLAN",
+        "リンクアグリゲーション",
+        "ジャンボフレーム",
+        "省電力（EEE）"
+      ],
+      "featureNote": "ループ検知・防止、ポートVLAN、リンクアグリゲーションは排他利用となります",
+      "tempText": "0～50℃",
+      "tempMaxC": 50,
+      "fanless": true,
+      "power": "内蔵電源",
+      "install": [
+        "ラックマウント",
+        "壁掛け"
+      ],
+      "housing": "金属",
+      "warrantyYears": 3,
+      "vcci": "A",
+      "usage": "法人向け",
+      "specDetails": {
+        "fabric": "32Gbps",
+        "macTable": "8192（エージングタイム：300秒）",
+        "buffer": "512kbytes",
+        "powerConsumption": "8.0W（Typ）",
+        "dimensions": "約290（W）&times;180（D）&times;44（H）mm ※ゴム足、突起部を含まず",
+        "weight": "約1.4 kg"
+      }
+    },
+    {
+      "id": "etg-esh24lm",
+      "sku": "ETG-ESH24LM",
+      "series": "etg-eshlm",
+      "name": "L2ライトマネージスイッチングハブ",
+      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etg-eshlm/index.htm",
+      "imageUrl": "https://www.iodata.jp/image/etg-eshlm_l.jpg",
+      "status": "現行",
+      "priceIncTax": 23980,
+      "priceText": null,
+      "jan": "4957180171104",
+      "ports": 24,
+      "speed": "1G",
+      "speedNote": null,
+      "sfp": null,
+      "management": "ライトマネージ",
+      "poe": null,
+      "features": [
+        "ループ検知・防止",
+        "VLAN",
+        "リンクアグリゲーション",
+        "ジャンボフレーム",
+        "省電力（EEE）"
+      ],
+      "featureNote": "ループ検知・防止、ポートVLAN、リンクアグリゲーションは排他利用となります",
+      "tempText": "0～50℃",
+      "tempMaxC": 50,
+      "fanless": true,
+      "power": "内蔵電源",
+      "install": [
+        "ラックマウント",
+        "壁掛け"
+      ],
+      "housing": "金属",
+      "warrantyYears": 3,
+      "vcci": "A",
+      "usage": "法人向け",
+      "specDetails": {
+        "fabric": "48Gbps",
+        "macTable": "8192（エージングタイム：300秒）",
+        "buffer": "512kbytes",
+        "powerConsumption": "12W（Typ）",
+        "dimensions": "約290（W）&times;180（D）&times;44（H）mm ※ゴム足、突起部を含まず",
+        "weight": "約1.5 kg"
+      }
+    },
+    {
+      "id": "etg-esh05um",
+      "sku": "ETG-ESH05UM",
+      "series": "etg-eshum",
+      "name": "Gigabit対応小型アンマネージスイッチングハブ",
+      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etg-eshum/index.htm",
+      "imageUrl": "https://www.iodata.jp/image/etg-eshum_l.jpg",
+      "status": "現行",
+      "priceIncTax": null,
+      "priceText": "オープン価格",
+      "jan": "4957180190310",
+      "ports": 5,
+      "speed": "1G",
+      "speedNote": null,
+      "sfp": null,
+      "management": "アンマネージ",
+      "poe": null,
+      "features": [
+        "ジャンボフレーム"
+      ],
+      "featureNote": null,
+      "tempText": "0～40℃",
+      "tempMaxC": 40,
+      "fanless": true,
+      "power": "ACアダプター",
+      "install": [
+        "マグネット"
+      ],
+      "housing": null,
+      "warrantyYears": 1,
+      "vcci": "B",
+      "usage": "家庭・SOHO向け",
+      "specDetails": {
+        "fabric": "10Gbps",
+        "macTable": "2048",
+        "buffer": "1MBit",
+        "powerConsumption": "1.6W（typ）",
+        "dimensions": "約88（W）&times;53（D）&times;23（H）mm※突起部を含まず",
+        "weight": "約67g"
+      }
+    },
+    {
+      "id": "etg-esh08um",
+      "sku": "ETG-ESH08UM",
+      "series": "etg-eshum",
+      "name": "Gigabit対応小型アンマネージスイッチングハブ",
+      "sourceUrl": "https://www.iodata.jp/product/lan/hub/etg-eshum/index.htm",
+      "imageUrl": "https://www.iodata.jp/image/etg-eshum_l.jpg",
+      "status": "現行",
+      "priceIncTax": null,
+      "priceText": "オープン価格",
+      "jan": "4957180190327",
+      "ports": 8,
+      "speed": "1G",
+      "speedNote": null,
+      "sfp": null,
+      "management": "アンマネージ",
+      "poe": null,
+      "features": [
+        "ジャンボフレーム"
+      ],
+      "featureNote": null,
+      "tempText": "0～40℃",
+      "tempMaxC": 40,
+      "fanless": true,
+      "power": "ACアダプター",
+      "install": [
+        "マグネット"
+      ],
+      "housing": null,
+      "warrantyYears": 1,
+      "vcci": "B",
+      "usage": "家庭・SOHO向け",
+      "specDetails": {
+        "fabric": "16Gbps",
+        "macTable": "4096",
+        "buffer": "1.5MBit",
+        "powerConsumption": "2.4W（Typ）",
+        "dimensions": "約138（W）&times;62（D）&times;23（H）mm※突起部を含まず",
+        "weight": "約120g"
       }
     },
     {
@@ -670,11 +672,7 @@
       "ports": 5,
       "speed": "2.5G",
       "speedNote": null,
-      "sfp": {
-        "count": 1,
-        "type": "SFP+",
-        "speed": "10G"
-      },
+      "sfp": null,
       "management": "アンマネージ",
       "poe": null,
       "features": [
@@ -693,11 +691,11 @@
       "vcci": "B",
       "usage": "家庭・SOHO向け",
       "specDetails": {
-        "fabric": "25Gbps（ノンブロッキング）※SFP+ポート除く",
+        "fabric": "25Gbps（ノンブロッキング） ※SFP+ポート除く",
         "macTable": "4K",
         "buffer": "8Mbit",
         "powerConsumption": "5.3W（Typ）",
-        "dimensions": "約158（W）×105（D）×27（H）mm",
+        "dimensions": "約158（W）&times;105（D）&times;27（H） mm",
         "weight": "約380g"
       }
     },
@@ -715,11 +713,7 @@
       "ports": 8,
       "speed": "2.5G",
       "speedNote": null,
-      "sfp": {
-        "count": 1,
-        "type": "SFP+",
-        "speed": "10G"
-      },
+      "sfp": null,
       "management": "アンマネージ",
       "poe": null,
       "features": [
@@ -738,11 +732,11 @@
       "vcci": "B",
       "usage": "家庭・SOHO向け",
       "specDetails": {
-        "fabric": "40Gbps（ノンブロッキング）※SFP+ポート除く",
+        "fabric": "40Gbps（ノンブロッキング） ※SFP+ポート除く",
         "macTable": "4K",
         "buffer": "8Mbit",
         "powerConsumption": "8.0W（Typ）",
-        "dimensions": "約220（W）×135（D）×30（H）mm",
+        "dimensions": "約220（W）&times;135（D）&times;30（H） mm",
         "weight": "約690g"
       }
     },
@@ -785,7 +779,7 @@
         "macTable": "16k",
         "buffer": "12Mbit",
         "powerConsumption": "14W（Typ）",
-        "dimensions": "約216（W）×133（D）×42（H）mm",
+        "dimensions": "約216（W）&times;133（D）&times;42（H）mm ※突起部を含まず",
         "weight": "約1.0kg"
       }
     },
@@ -828,7 +822,7 @@
         "macTable": "16k",
         "buffer": "12Mbit",
         "powerConsumption": "20W（Typ）",
-        "dimensions": "約267（W）×162（D）×42（H）mm",
+        "dimensions": "約267（W）&times;162（D）&times;42（H）mm ※突起部を含まず",
         "weight": "約1.9kg"
       }
     }
