@@ -53,6 +53,9 @@ const HEADING_TEXTS = [
   "インテリジェントスイッチ", "アンマネージスイッチ", "インジェクター"
 ];
 
+// 実行時に表示する版の名前（どの版のスクレイパーが動いたかを確認するため）
+const SCRAPER_VERSION = "2026-10-06b 使用温度範囲の下限に対応";
+
 const OUTPUT_PATH = new URL("../data/switches.json", import.meta.url);
 const REQUEST_INTERVAL_MS = 2000;
 const USER_AGENT =
@@ -148,6 +151,15 @@ const NOT_SKU_PREFIX = /^(EAP|IEEE|VCCI|PEAP|CHAP|PoE)/i;
 // 型番らしい文字列の直後が「シリーズ」なら、それは型番ではなくシリーズ名
 function isSeriesName(text, endIndex) {
   return /^\s*シリーズ/.test(text.slice(endIndex, endIndex + 8));
+}
+
+// シリーズのページ名（URLの etx-esh08c の部分）とまったく同じ文字列の「型番」は、
+// 実際にはシリーズ名（ETX-ESH08Cシリーズ）なので、ほかに本物の型番がある場合は外す。
+// 1機種だけのシリーズ（例：bsh-gp08mb → BSH-GP08MB）はページ名＝型番なので残す。
+export function dropSeriesNameSku(slug, skus) {
+  const slugUpper = String(slug).toUpperCase();
+  const others = skus.filter(s => s.toUpperCase() !== slugUpper);
+  return others.length > 0 ? others : skus;
 }
 
 function skuRegex(sku) {
@@ -398,7 +410,7 @@ export function parseListPage(html) {
       if (isSeriesName(text, sm.index + sm[0].length)) continue;
       skus.add(sku);
     }
-    s.skus = [...skus];
+    s.skus = dropSeriesNameSku(s.slug, [...skus]);
     s.models = {};
     s.skus.forEach(sku => {
       s.models[sku] = lookupListModelInfo(blockHtml, sku, s.skus);
@@ -589,11 +601,14 @@ export function extractModel(ctx) {
   // --- 動作温度 ---
   let tempText = null;
   let tempMaxC = null;
+  let tempMinC = null;
   const tempRow = rows.find(r => /温度/.test(nk(r.label)) && !/湿度/.test(nk(r.label)) && /\d/.test(r.value));
   if (tempRow) {
     tempText = tempRow.value;
     const tm = nk(tempRow.value).match(/~\s*\+?\s*(\d+)\s*(?:°\s*C|℃|度)/);
     if (tm) tempMaxC = Number(tm[1]);
+    const tmin = nk(tempRow.value).match(/(-?\d+)\s*(?:°\s*C|℃|度)?\s*~/);
+    if (tmin) tempMinC = Number(tmin[1]);
   }
   if (tempMaxC == null) warnings.push("動作温度");
 
@@ -657,7 +672,7 @@ export function extractModel(ctx) {
 
   return {
     ports, speed, speedNote, sfp, management, poe, features, featureNote,
-    tempText, tempMaxC, fanless, power, warrantyYears, vcci, housing, specDetails,
+    tempText, tempMinC, tempMaxC, fanless, power, warrantyYears, vcci, housing, specDetails,
     warnings
   };
 }
@@ -757,6 +772,7 @@ function extractOgImage(indexHtml) {
 // ---------------------------------------------------------------------------
 
 async function main() {
+  console.log(`スイッチセレクター スクレイパー（版：${SCRAPER_VERSION}）`);
   console.log("一覧ページを取得しています...");
   const allSeries = {};
   for (const url of LIST_PAGES) {
@@ -785,6 +801,8 @@ async function main() {
   }
 
   const seriesList = Object.values(allSeries);
+  // 複数の一覧ページを合わせた後にも、シリーズ名を型番と取り違えていないか念のため確認する
+  seriesList.forEach(s => { s.skus = dropSeriesNameSku(s.slug, s.skus); });
   console.log(`合計 ${seriesList.length} シリーズを処理します。`);
 
   const switches = [];
@@ -878,6 +896,7 @@ async function main() {
         features: ex.features,
         featureNote: ex.featureNote,
         tempText: ex.tempText,
+        tempMinC: ex.tempMinC,
         tempMaxC: ex.tempMaxC,
         fanless: ex.fanless,
         power: ex.power,
@@ -916,7 +935,7 @@ async function main() {
     console.log(
       `${item.sku.padEnd(13)} ${item.status} | ${item.ports ?? "?"}ポート ${item.speed ?? "?"}` +
       `${item.sfp ? " +" + item.sfp.type + "×" + item.sfp.count : ""} | ${item.management} | ${poe}` +
-      ` | ${item.tempMaxC ?? "?"}℃ | ${item.fanless === true ? "ファンレス" : item.fanless === false ? "ファンあり" : "ファン?"}` +
+      ` | ${item.tempMinC ?? "?"}〜${item.tempMaxC ?? "?"}℃ | ${item.fanless === true ? "ファンレス" : item.fanless === false ? "ファンあり" : "ファン?"}` +
       ` | ${item.power ?? "電源?"} | ${item.install.join("・") || "設置-"} | 保証${item.warrantyYears ?? "?"}年 | VCCI ${item.vcci ?? "?"}` +
       ` | ${item.priceIncTax != null ? "¥" + item.priceIncTax.toLocaleString() : item.priceText} | JAN ${item.jan ?? "-"}`
     );
