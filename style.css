@@ -261,7 +261,7 @@ details[open] > .filter-group__label::before { transform: rotate(90deg); }
 .price-wrap { text-align: right; }
 .price { margin: 0; font-size: 18px; font-weight: 700; white-space: nowrap; }
 .price--open { font-size: 14px; color: var(--text-secondary); }
-.price-tax { margin: 0; font-size: 10px; color: var(--text-muted); }
+.price-tax { margin: 0; font-size: 11px; color: var(--text-muted); } /* 税抜価格（NASセレクターと同じ大きさ） */
 
 .official-link {
   display: block; margin-top: 4px; padding-top: 8px;

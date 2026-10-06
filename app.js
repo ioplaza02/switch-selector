@@ -379,6 +379,13 @@ function fmtPrice(p) {
   return p.priceText || "オープン価格";
 }
 
+// 税抜価格。I-O DATA公式の表記「￥21,780（税抜￥19,800）」に合わせて、税込÷1.1で求める
+// （公式の価格はすべて税込÷1.1で割り切れることを確認済み）。オープン価格のときは何も付けない
+function fmtExTax(p) {
+  if (p.priceIncTax == null) return "";
+  return "（税抜 ¥" + Math.round(p.priceIncTax / 1.1).toLocaleString() + "）";
+}
+
 function poeSummary(p) {
   if (!p.poe) return null;
   const std = (p.poe.standards || []).includes("802.3at") ? "PoE+" : "PoE";
@@ -521,7 +528,7 @@ function productCard(p) {
   priceRow.appendChild(skuBlock);
   const priceWrap = el("div", "price-wrap");
   priceWrap.appendChild(el("p", "price" + (p.priceIncTax == null ? " price--open" : ""), fmtPrice(p)));
-  if (p.priceIncTax != null) priceWrap.appendChild(el("p", "price-tax", "税込・メーカー希望小売価格"));
+  if (p.priceIncTax != null) priceWrap.appendChild(el("p", "price-tax", fmtExTax(p)));
   priceRow.appendChild(priceWrap);
   card.appendChild(priceRow);
 
@@ -553,7 +560,7 @@ function openCompare() {
   const yesNo = v => v ? "○" : "－";
 
   const basicRows = [
-    ["価格", p => fmtPrice(p)],
+    ["価格", p => fmtPrice(p) + fmtExTax(p)],
     ["ポート数", p => p.ports != null ? p.ports + "ポート" : null],
     ["通信速度", p => (SPEED_LABEL[p.speed] || p.speed || "") + (p.speedNote ? "（" + p.speedNote + "）" : "")],
     ["SFP / SFP+", p => p.sfp ? p.sfp.type + "×" + p.sfp.count + "（" + p.sfp.speed + "）" : "なし"],
