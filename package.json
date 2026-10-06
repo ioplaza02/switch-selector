@@ -1,0 +1,8 @@
+{
+  "name": "switch-selector",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "scrape": "node scripts/scrape.mjs"
+  }
+}

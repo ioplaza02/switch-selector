@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>スイッチセレクター（試作）</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="password-gate" id="password-gate">
+  <form class="password-gate__box" id="password-form">
+    <p class="password-gate__title">スイッチセレクター（試作）</p>
+    <p class="password-gate__note">関係者限定の試作版です。パスワードを入力してください。</p>
+    <div class="password-gate__field">
+      <input type="password" id="password-input" class="password-gate__input" autocomplete="off">
+      <button type="button" id="password-toggle" class="password-gate__toggle" aria-label="パスワードを表示">👁</button>
+    </div>
+    <button type="submit" class="password-gate__submit">入る</button>
+    <p class="password-gate__error" id="password-error" hidden>パスワードが違います</p>
+  </form>
+</div>
+
+<div id="app-root" hidden>
+
+<header class="brand-banner">
+  <span class="brand-banner__badge">スイッチセレクター</span>
+  <span class="brand-banner__title">I-O DATA スイッチングハブ</span>
+</header>
+
+<header class="site-header">
+  <h1>スイッチングハブ選定ツール</h1>
+  <p class="site-header__sub">必要な条件を左から選んでいくと、当てはまる機種だけに絞り込まれます</p>
+</header>
+
+<div class="disclaimer">
+  <p>
+    価格・在庫状況は変動する場合があります。最新情報は、各商品カードの写真をクリックすると開く
+    I-O DATA公式ページでご確認ください。
+  </p>
+  <p class="disclaimer__updated" id="updated-at"></p>
+</div>
+
+<main class="layout">
+  <aside class="filter-panel" id="filter-panel" aria-label="絞り込み条件"></aside>
+
+  <section class="result-area">
+    <div class="result-bar">
+      <p class="result-count" id="result-count"></p>
+      <label class="status-toggle-inline">
+        <span class="status-toggle-inline__text">生産終了品（在庫限り）を含める</span>
+        <span class="switch">
+          <input type="checkbox" id="show-discontinued">
+          <span class="switch__track"><span class="switch__thumb"></span></span>
+        </span>
+      </label>
+    </div>
+    <div id="notice-area"></div>
+    <div class="product-grid" id="product-grid"></div>
+  </section>
+</main>
+
+<div class="compare-tray" id="compare-tray">
+  <div>
+    <p class="compare-tray__title">商品比較（<span id="tray-count">0</span>件選択中）</p>
+    <p class="compare-tray__note">比較したい商品の「比較」にチェックを入れてください（2件以上）</p>
+  </div>
+  <button id="tray-btn" disabled>比較する</button>
+</div>
+
+<div class="compare-modal" id="compare-modal" hidden>
+  <div class="compare-modal__inner">
+    <button class="compare-modal__close" id="compare-close" aria-label="閉じる">×</button>
+    <div class="compare-modal__scroll">
+      <h2>商品比較</h2>
+      <p class="compare-legend"><span class="compare-legend__swatch"></span>色が付いている行は、選んだ機種の間で違いがある項目です</p>
+      <div id="compare-table-wrap"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
