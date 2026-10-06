@@ -52,7 +52,7 @@ const uiState = {}; // 型番ごとの「比較」チェック
 function emptyFilters() {
   return {
     ports: new Set(),
-    speed: new Set(),
+    speedMin: null, // 「〜以上」で絞り込む（1つだけ選ぶ）
     sfp: false,
     usage: new Set(),
     management: new Set(),
@@ -212,13 +212,21 @@ function buildFilterPanel() {
 
   // ① 基本スペック
   const basic = section("basic", "基本スペック", () =>
-    filters.ports.size + filters.speed.size + (filters.sfp ? 1 : 0) + filters.usage.size);
+    filters.ports.size + (filters.speedMin ? 1 : 0) + (filters.sfp ? 1 : 0) + filters.usage.size);
   const portValues = [...new Set(allProducts.map(p => p.ports).filter(v => v != null))].sort((a, b) => a - b);
   basic.appendChild(subTitle("ポート数", "LANケーブルを挿せる口の数（複数選択可）"));
   basic.appendChild(pillGroup(portValues, filters.ports, v => v + "ポート"));
   const speedValues = SPEED_ORDER.filter(s => allProducts.some(p => p.speed === s));
-  basic.appendChild(subTitle("通信速度", "NASなど大容量データを速く扱いたいなら2.5G・10G"));
-  basic.appendChild(pillGroup(speedValues, filters.speed, v => SPEED_LABEL[v] || v));
+  basic.appendChild(subTitle("通信速度", "選んだ速度以上の機種が出ます（速い機種は遅い速度にも対応）。NASなど大容量データを速く扱いたいなら2.5G以上"));
+  // 速い機種は遅い速度にも対応しているので「〜以上」で選ぶ。
+  // 一番遅い速度（全機種が当てはまる）は絞り込みにならないので選択肢から外し、「指定なし」を先頭に置く。
+  const speedOptions = [{ value: null, label: "指定なし" }].concat(
+    speedValues.slice(1).map((v, i, arr) => ({
+      value: v,
+      label: (SPEED_LABEL[v] || v) + (i < arr.length - 1 ? "以上" : "")
+    }))
+  );
+  basic.appendChild(pillSingle(speedOptions, () => filters.speedMin, v => { filters.speedMin = v; }));
   basic.appendChild(subTitle("光ファイバー・アップリンク"));
   basic.appendChild(checkOption("SFP / SFP+ポートあり", "光ファイバーや上位スイッチとの高速接続用", filters.sfp, v => { filters.sfp = v; }));
   basic.appendChild(subTitle("用途"));
@@ -316,7 +324,7 @@ function updateSectionCounts() {
 
 function matchesFilters(p) {
   if (filters.ports.size && !filters.ports.has(p.ports)) return false;
-  if (filters.speed.size && !filters.speed.has(p.speed)) return false;
+  if (filters.speedMin && SPEED_ORDER.indexOf(p.speed) < SPEED_ORDER.indexOf(filters.speedMin)) return false;
   if (filters.sfp && !p.sfp) return false;
   if (filters.usage.size && !filters.usage.has(p.usage)) return false;
   // L3はI-O DATAに該当製品が無いため、どの機種の management とも一致しない
