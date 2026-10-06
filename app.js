@@ -96,10 +96,20 @@ async function init() {
     }
   }
 
+  // 共有されたURL（?port=8&poe=1&cmp=… など）から、絞り込み条件・比較の選択を復元する
+  const openCompareFromUrl = applyStateFromUrl();
+
   buildFilterPanel();
   render();
 
   document.getElementById("show-discontinued").addEventListener("change", render);
+  document.getElementById("share-btn").addEventListener("click", () => {
+    copyShareUrl(buildShareUrl(false), "share-feedback", "share-fallback", "share-fallback-input");
+  });
+  document.getElementById("compare-share-btn").addEventListener("click", () => {
+    copyShareUrl(buildShareUrl(true), "compare-share-feedback", "compare-share-fallback", "compare-share-fallback-input");
+  });
+  if (openCompareFromUrl && allProducts.filter(p => uiState[p.id].checked).length >= 2) openCompare();
   document.getElementById("compare-close").addEventListener("click", () => {
     document.getElementById("compare-modal").hidden = true;
   });
@@ -393,6 +403,7 @@ function poeSummary(p) {
 }
 
 function render() {
+  syncUrl();
   updateSectionCounts();
   const visible = visibleProducts();
   const showDiscontinued = document.getElementById("show-discontinued").checked;
@@ -481,6 +492,7 @@ function productCard(p) {
     s.checked = compareCb.checked;
     card.classList.toggle("product-card--selected", s.checked);
     updateTray();
+    syncUrl();
   });
   compareLabel.appendChild(compareCb);
   compareLabel.appendChild(document.createTextNode("比較"));
@@ -631,6 +643,133 @@ function openCompare() {
 
   document.getElementById("compare-table-wrap").innerHTML = html;
   document.getElementById("compare-modal").hidden = false;
+}
+
+// ---------------------------------------------------------------------------
+// 共有用URL
+// 選んだ条件をURLの「?」以降に入れておき、そのURLを開くと同じ絞り込み・比較の状態が再現される。
+//   port=8              ポート数（複数可）
+//   speed=2.5G          通信速度（〜以上）
+//   sfp=1               SFP / SFP+ポートあり
+//   usage=home|biz      家庭・SOHO向け／法人向け（複数可）
+//   mgmt=unmanaged|light|l2|l3   管理機能（複数可）
+//   poe=1 poeplus=1 poew=60      PoE給電あり／PoE+対応／総給電量
+//   feature=vlan など    高機能（複数可）
+//   temp=0_50           使用温度範囲（複数可）
+//   fanless=1 inpower=1 metal=1  ファンレス／電源内蔵／金属筐体
+//   install=rack|magnet|wall     設置方法（複数可）
+//   warranty=5          保証年数（複数可）
+//   disc=1              生産終了品（在庫限り）を含める
+//   cmp=型番ID          比較に選んだ機種（複数可）
+//   view=compare        開いたときに比較表を表示する
+// ---------------------------------------------------------------------------
+
+// URLが日本語だらけで長くならないよう、選択肢は短い英字の記号に置き換える
+const USAGE_CODE = { "家庭・SOHO向け": "home", "法人向け": "biz" };
+const MGMT_CODE = { "アンマネージ": "unmanaged", "ライトマネージ": "light", "L2インテリジェント": "l2", "L3": "l3" };
+const FEATURE_CODE = {
+  "ループ検知・防止": "loop", "VLAN": "vlan", "QoS": "qos", "リンクアグリゲーション": "lag",
+  "IGMPスヌーピング": "igmp", "IEEE802.1X認証": "8021x", "ポートミラーリング": "mirror",
+  "SNMP監視": "snmp", "ジャンボフレーム": "jumbo", "省電力（EEE）": "eee"
+};
+const INSTALL_CODE = { "ラックマウント": "rack", "マグネット": "magnet", "壁掛け": "wall" };
+
+function codesOf(set, table) {
+  return [...set].map(v => table[v]).filter(Boolean);
+}
+function valuesFromCodes(codes, table) {
+  return Object.keys(table).filter(v => codes.includes(table[v]));
+}
+
+function buildShareUrl(withCompareView) {
+  const params = new URLSearchParams();
+  [...filters.ports].sort((a, b) => a - b).forEach(v => params.append("port", String(v)));
+  if (filters.speedMin) params.set("speed", filters.speedMin);
+  if (filters.sfp) params.set("sfp", "1");
+  codesOf(filters.usage, USAGE_CODE).forEach(c => params.append("usage", c));
+  codesOf(filters.management, MGMT_CODE).forEach(c => params.append("mgmt", c));
+  if (filters.poe) params.set("poe", "1");
+  if (filters.poePlus) params.set("poeplus", "1");
+  if (filters.poeTotalMin) params.set("poew", String(filters.poeTotalMin));
+  codesOf(filters.features, FEATURE_CODE).forEach(c => params.append("feature", c));
+  [...filters.tempRanges].forEach(k => params.append("temp", k));
+  if (filters.fanless) params.set("fanless", "1");
+  if (filters.internalPower) params.set("inpower", "1");
+  if (filters.metal) params.set("metal", "1");
+  codesOf(filters.install, INSTALL_CODE).forEach(c => params.append("install", c));
+  [...filters.warranty].sort((a, b) => a - b).forEach(v => params.append("warranty", String(v)));
+  const disc = document.getElementById("show-discontinued");
+  if (disc && disc.checked) params.set("disc", "1");
+  allProducts.forEach(p => { if (uiState[p.id] && uiState[p.id].checked) params.append("cmp", p.id); });
+  if (withCompareView) params.set("view", "compare");
+  const query = params.toString();
+  return location.origin + location.pathname + (query ? "?" + query : "");
+}
+
+// アドレス欄のURLも、いまの絞り込み条件に合わせて更新しておく（そのままコピーしても共有できる）
+function syncUrl() {
+  try {
+    history.replaceState(null, "", buildShareUrl(false));
+  } catch (err) {
+    console.warn("URLの更新に失敗しました:", err);
+  }
+}
+
+// 共有URLの条件を画面の状態に反映する。比較表を開くよう指定されていれば true を返す。
+// 実際のデータに無い値（古いURLや手で書き換えたURL）は無視する。
+function applyStateFromUrl() {
+  const params = new URLSearchParams(location.search);
+  const portValues = new Set(allProducts.map(p => p.ports));
+  params.getAll("port").map(Number).forEach(n => { if (portValues.has(n)) filters.ports.add(n); });
+  const speed = params.get("speed");
+  if (speed && SPEED_ORDER.includes(speed)) filters.speedMin = speed;
+  filters.sfp = params.get("sfp") === "1";
+  valuesFromCodes(params.getAll("usage"), USAGE_CODE).forEach(v => filters.usage.add(v));
+  valuesFromCodes(params.getAll("mgmt"), MGMT_CODE).forEach(v => filters.management.add(v));
+  // PoE+・総給電量は「PoE給電あり」を選んだときだけ有効（画面と同じ決まり）
+  filters.poe = params.get("poe") === "1";
+  if (filters.poe) {
+    filters.poePlus = params.get("poeplus") === "1";
+    const w = Number(params.get("poew"));
+    if (POE_TOTAL_STEPS.some(s => s.value === w)) filters.poeTotalMin = w;
+  }
+  valuesFromCodes(params.getAll("feature"), FEATURE_CODE).forEach(v => filters.features.add(v));
+  const tempKeys = new Set(allProducts.map(tempKey).filter(Boolean));
+  params.getAll("temp").forEach(k => { if (tempKeys.has(k)) filters.tempRanges.add(k); });
+  filters.fanless = params.get("fanless") === "1";
+  filters.internalPower = params.get("inpower") === "1";
+  filters.metal = params.get("metal") === "1";
+  valuesFromCodes(params.getAll("install"), INSTALL_CODE).forEach(v => filters.install.add(v));
+  const warrantyValues = new Set(allProducts.map(p => p.warrantyYears));
+  params.getAll("warranty").map(Number).forEach(n => { if (warrantyValues.has(n)) filters.warranty.add(n); });
+  if (params.get("disc") === "1") document.getElementById("show-discontinued").checked = true;
+  params.getAll("cmp").forEach(id => { if (uiState[id]) uiState[id].checked = true; });
+
+  // 普段は閉じている欄（高機能・設置環境・保証）に条件が入っていたら、開いた状態で見せる
+  if (filters.features.size) openSections.features = true;
+  if (filters.tempRanges.size || filters.fanless || filters.internalPower || filters.metal || filters.install.size) openSections.environment = true;
+  if (filters.warranty.size) openSections.other = true;
+
+  return params.get("view") === "compare";
+}
+
+async function copyShareUrl(url, feedbackId, fallbackId, fallbackInputId) {
+  const feedback = document.getElementById(feedbackId);
+  const fallback = document.getElementById(fallbackId);
+  const fallbackInput = document.getElementById(fallbackInputId);
+  try {
+    await navigator.clipboard.writeText(url);
+    fallback.hidden = true;
+    feedback.textContent = "URLをコピーしました";
+    feedback.hidden = false;
+    setTimeout(() => { feedback.hidden = true; }, 2500);
+  } catch (err) {
+    // クリップボードが使えない環境では、確認ウィンドウ（prompt）は使わずに、画面上にURLを表示して手でコピーしてもらう
+    fallbackInput.value = url;
+    fallback.hidden = false;
+    fallbackInput.focus();
+    fallbackInput.select();
+  }
 }
 
 // ---------------------------------------------------------------------------
