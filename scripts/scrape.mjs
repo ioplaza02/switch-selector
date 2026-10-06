@@ -145,6 +145,11 @@ function absUrl(src) {
 const SKU_RE = /(?<![A-Z0-9\-])([A-Z]{3,4}\d?-[A-Z0-9]*\d[A-Z0-9]*(?:\/[A-Z0-9]+)?)(?![A-Z0-9])/g;
 const NOT_SKU_PREFIX = /^(EAP|IEEE|VCCI|PEAP|CHAP|PoE)/i;
 
+// 型番らしい文字列の直後が「シリーズ」なら、それは型番ではなくシリーズ名
+function isSeriesName(text, endIndex) {
+  return /^\s*シリーズ/.test(text.slice(endIndex, endIndex + 8));
+}
+
 function skuRegex(sku) {
   const esc = sku.replace(/[.*+?^${}()|[\]\\\/]/g, "\\$&");
   return new RegExp("(?<![A-Z0-9\\-])" + esc + "(?![A-Z0-9/])", "g");
@@ -388,6 +393,9 @@ export function parseListPage(html) {
       const sku = sm[1];
       if (NOT_SKU_PREFIX.test(sku)) continue;
       if (sku.split("-")[0] !== prefix) continue;
+      // 「ETX-ESH08Cシリーズ」のようなシリーズ名を型番と誤認しないよう、
+      // 直後に「シリーズ」が続く出現は型番として数えない
+      if (isSeriesName(text, sm.index + sm[0].length)) continue;
       skus.add(sku);
     }
     s.skus = [...skus];
@@ -807,7 +815,7 @@ async function main() {
       let m;
       const re = new RegExp(SKU_RE.source, "g");
       while ((m = re.exec(t)) !== null) {
-        if (m[1].split("-")[0] === prefix && !NOT_SKU_PREFIX.test(m[1])) found.add(m[1]);
+        if (m[1].split("-")[0] === prefix && !NOT_SKU_PREFIX.test(m[1]) && !isSeriesName(t, m.index + m[0].length)) found.add(m[1]);
       }
       s.skus = [...found];
       s.skus.forEach(sku => { s.models[sku] = { found: false }; });
