@@ -686,7 +686,11 @@
       "ports": 5,
       "speed": "2.5G",
       "speedNote": null,
-      "sfp": null,
+      "sfp": {
+        "count": 1,
+        "type": "SFP+",
+        "speed": "10G"
+      },
       "management": "アンマネージ",
       "poe": null,
       "features": [
@@ -728,7 +732,11 @@
       "ports": 8,
       "speed": "2.5G",
       "speedNote": null,
-      "sfp": null,
+      "sfp": {
+        "count": 1,
+        "type": "SFP+",
+        "speed": "10G"
+      },
       "management": "アンマネージ",
       "poe": null,
       "features": [
