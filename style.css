@@ -450,3 +450,58 @@ details[open] > .filter-group__label::before { transform: rotate(90deg); }
   .product-card:hover { transform: none; box-shadow: var(--float-1); }
   .product-card:hover .product-card__image { transform: none; }
 }
+
+/* =====================================================================
+   「公式ページで詳しく見る」をボタンに（2026-10-16）
+   ===================================================================== */
+.official-link {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-top: 6px; padding: 10px 14px;
+  border: none; border-radius: 999px;
+  background: var(--accent); color: #fff;
+  font-size: 13px; font-weight: 700; text-align: center; text-decoration: none;
+  box-shadow: 0 2px 6px rgba(15, 110, 86, .22);
+  transition: transform .2s var(--ease-out), box-shadow .2s var(--ease-out), background .2s;
+}
+.official-link::after { content: "↗"; font-size: 13px; transition: transform .2s var(--ease-out); }
+.official-link:hover { text-decoration: none; background: #0b5c47; transform: translateY(-2px); box-shadow: 0 8px 16px rgba(15, 110, 86, .28); }
+.official-link:hover::after { transform: translate(2px, -2px); }
+.official-link:focus-visible { outline: 3px solid #f0b37e; outline-offset: 2px; }
+
+/* =====================================================================
+   比較結果のPDF出力（2026-10-16）
+   ===================================================================== */
+.pdf-btn {
+  font-family: inherit; font-size: 12px; font-weight: 700;
+  padding: 6px 16px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  transition: transform .2s var(--ease-out), box-shadow .2s, background .2s;
+}
+.pdf-btn:hover { background: #0b5c47; transform: translateY(-1px); box-shadow: 0 6px 12px rgba(15, 110, 86, .25); }
+
+.print-sheet { display: none; }
+
+@media print {
+  @page {
+    size: A4 landscape; margin: 10mm 12mm 12mm;
+    @bottom-right { content: counter(page) " / " counter(pages); font-size: 8pt; color: #8a8880; }
+  }
+  body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .password-gate, #app-root, .compare-modal { display: none !important; }
+  .print-sheet { display: block; font-size: 9pt; color: #1f1e1c; line-height: 1.5; }
+  .ps-top { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 5px; border-bottom: 2px solid #0f6e56; font-size: 8.5pt; color: #5f5e5a; }
+  .ps-top b { color: #0f6e56; font-size: 11pt; letter-spacing: .04em; }
+  .ps-label { margin: 8px 0 6px; font-size: 9pt; font-weight: 700; color: #0f6e56; }
+  .ps-legend { margin-left: 12px; font-weight: 400; color: #8a8880; font-size: 8pt; }
+  .ps-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 4px; vertical-align: -1px; background: #e1f5ee; border-left: 3px solid #0f6e56; }
+  .print-sheet .compare-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 8pt; }
+  .print-sheet .compare-table th, .print-sheet .compare-table td { padding: 3px 6px; border: 1px solid #d9d6cf; vertical-align: top; animation: none !important; }
+  .print-sheet .compare-table th { width: 120px; }
+  .print-sheet .compare-table__head { width: auto !important; }
+  .print-sheet .compare-table__sku { font-size: 10pt; }
+  .print-sheet .compare-table__name { font-size: 7pt; }
+  .print-sheet .compare-table__image { width: 60px; height: 40px; }
+  .print-sheet .compare-table tr { break-inside: avoid; }
+  .print-sheet .compare-footnote { font-size: 7.5pt; margin-top: 6px; }
+  .ps-foot-note { margin: 8px 0 0; font-size: 7pt; line-height: 1.7; color: #8a8880; }
+}

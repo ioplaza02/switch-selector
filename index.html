@@ -86,6 +86,7 @@
         <div class="share-area">
           <button type="button" class="share-btn" id="compare-share-btn">この比較結果のURLをコピー</button>
           <span class="share-feedback" id="compare-share-feedback" hidden></span>
+          <button type="button" class="pdf-btn" id="compare-pdf-btn">PDFで保存</button>
         </div>
       </div>
       <div class="share-fallback" id="compare-share-fallback" hidden>
@@ -99,6 +100,9 @@
 </div>
 
 </div>
+
+<!-- PDF出力用（画面には表示せず、印刷・PDF保存のときだけ使う） -->
+<div class="print-sheet" id="print-sheet" aria-hidden="true"></div>
 
 <script src="app.js"></script>
 </body>

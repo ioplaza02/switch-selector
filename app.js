@@ -109,6 +109,7 @@ async function init() {
   document.getElementById("compare-share-btn").addEventListener("click", () => {
     copyShareUrl(buildShareUrl(true), "compare-share-feedback", "compare-share-fallback", "compare-share-fallback-input");
   });
+  document.getElementById("compare-pdf-btn").addEventListener("click", saveComparePdf);
   if (openCompareFromUrl && allProducts.filter(p => uiState[p.id].checked).length >= 2) openCompare();
   document.getElementById("compare-close").addEventListener("click", () => {
     document.getElementById("compare-modal").hidden = true;
@@ -544,7 +545,7 @@ function productCard(p) {
   priceRow.appendChild(priceWrap);
   card.appendChild(priceRow);
 
-  const link = el("a", "official-link", "公式ページで詳しく見る →");
+  const link = el("a", "official-link", "公式ページで詳しく見る");
   link.href = p.sourceUrl;
   link.target = "_blank";
   link.rel = "noopener noreferrer";
@@ -562,6 +563,16 @@ function updateTray() {
 // ---------------------------------------------------------------------------
 // 比較ポップアップ
 // ---------------------------------------------------------------------------
+
+// 商品ページから取り込んだ文字に「&times;」などの記号の書き方が残っていることがあるため、
+// 表示前に本来の記号（×など）に戻す
+function decodeEntities(s) {
+  const map = { times: "×", amp: "&", lt: "<", gt: ">", quot: '"', nbsp: " ", plusmn: "±", deg: "°" };
+  return s.replace(/&(#\d+|[a-z]+);/gi, (m, name) => {
+    if (name[0] === "#") return String.fromCharCode(Number(name.slice(1)));
+    return map[name.toLowerCase()] != null ? map[name.toLowerCase()] : m;
+  });
+}
 
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -606,7 +617,7 @@ function openCompare() {
 
   // 行ごとに、選んだ候補全体で値が同じか違うかを見て、違う行だけ目立たせる
   function rowHtml(label, getter) {
-    const values = selected.map(p => { const v = getter(p); return v == null || v === "" ? "－" : String(v); });
+    const values = selected.map(p => { const v = getter(p); return v == null || v === "" ? "－" : decodeEntities(String(v)); });
     const allSame = values.every(v => v === values[0]);
     let out = '<tr class="' + (allSame ? "compare-table__row--same" : "compare-table__row--diff") + '"><th>' + escapeHtml(label) + "</th>";
     values.forEach(v => { out += "<td>" + escapeHtml(v) + "</td>"; });
@@ -643,6 +654,53 @@ function openCompare() {
 
   document.getElementById("compare-table-wrap").innerHTML = html;
   document.getElementById("compare-modal").hidden = false;
+}
+
+// ---------------------------------------------------------------------------
+// 比較結果のPDF出力
+// ブラウザの印刷機能で「PDFに保存」する。印刷用の紙面（#print-sheet）を作り、
+// 印刷中だけページのタイトルをファイル名にする（Chromeなどは、これを保存時のファイル名の初期値に使う）。
+// ファイル名の例：スイッチ比較_BSH-CP210_ETX-ESH08WC_20261016.pdf
+// ---------------------------------------------------------------------------
+
+function ymd(d) {
+  return d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
+}
+
+function comparePdfFileName(selected, now) {
+  // ファイル名に使えない記号（/ など）はハイフンに置き換える
+  const skus = selected.map(p => String(p.sku).replace(/[\\/:*?"<>|\s]+/g, "-"));
+  // 機種が多すぎるとファイル名が長くなりすぎるため、5件目以降は「ほかN件」にまとめる
+  const shown = skus.length > 4 ? skus.slice(0, 4).concat(["ほか" + (skus.length - 4) + "件"]) : skus;
+  return "スイッチ比較_" + shown.join("_") + "_" + ymd(now);
+}
+
+function saveComparePdf() {
+  const selected = allProducts.filter(p => uiState[p.id].checked);
+  if (selected.length < 2) return;
+  const now = new Date();
+  const fileName = comparePdfFileName(selected, now);
+  const dateText = now.getFullYear() + "年" + (now.getMonth() + 1) + "月" + now.getDate() + "日";
+
+  // 画面の比較表をそのまま使う（リンクだけ外す）
+  const tableHtml = document.getElementById("compare-table-wrap").innerHTML.replace(/<\/?a\b[^>]*>/g, "");
+  const sheet = document.getElementById("print-sheet");
+  sheet.innerHTML =
+    '<div class="ps-top"><b>I-O DATA スイッチングハブ　商品比較</b><span>出力日：' + escapeHtml(dateText) + "</span></div>" +
+    '<p class="ps-label">比較した機種　' + selected.length + "件：" + escapeHtml(selected.map(p => p.sku).join("、")) +
+    '<span class="ps-legend"><i></i>色が付いている行 = 機種によって違う項目</span></p>' +
+    tableHtml +
+    '<p class="ps-foot-note">表示価格は、I-O DATA公式サイトに掲載のメーカー希望小売価格（税込）です。価格・在庫状況は変動する場合があります。' +
+    "最新情報はI-O DATA公式ページでご確認ください。</p>";
+
+  const oldTitle = document.title;
+  document.title = fileName; // 「PDFに保存」のときのファイル名の初期値になる
+  const restore = () => { document.title = oldTitle; window.removeEventListener("afterprint", restore); };
+  window.addEventListener("afterprint", restore);
+  // 商品写真の読み込みを待ってから、印刷（PDF保存）の画面を開く
+  const imgs = Array.from(sheet.querySelectorAll("img"));
+  Promise.all(imgs.map(im => im.complete ? Promise.resolve() : new Promise(r => { im.addEventListener("load", r); im.addEventListener("error", r); })))
+    .then(() => setTimeout(() => window.print(), 150));
 }
 
 // ---------------------------------------------------------------------------
