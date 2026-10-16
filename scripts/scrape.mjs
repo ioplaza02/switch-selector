@@ -54,7 +54,7 @@ const HEADING_TEXTS = [
 ];
 
 // 実行時に表示する版の名前（どの版のスクレイパーが動いたかを確認するため）
-const SCRAPER_VERSION = "2026-10-06b 使用温度範囲の下限に対応";
+const SCRAPER_VERSION = "2026-10-16 SFP+ポートの見出し（ポート数 SFP+）に対応";
 
 const OUTPUT_PATH = new URL("../data/switches.json", import.meta.url);
 const REQUEST_INTERVAL_MS = 2000;
@@ -491,7 +491,13 @@ export function extractModel(ctx) {
 
   // --- SFP / SFP+ ---
   let sfp = null;
-  const sfpRow = findRow(rows, /SFP\+?\s*ポート/i);
+  // 仕様表の書き方は「SFP+ポート｜1」のほか、「ポート数｜SFP+｜1ポート」（BSH-QGシリーズ）のように
+  // 見出しが2段に分かれて「ポート数 SFP+」という並びになることもあるため、語順を問わず探す。
+  // 「推奨SFPモジュール」などモジュールの行は除く。
+  const sfpRow = rows.find(r => {
+    const l = nk(r.label);
+    return /SFP/i.test(l) && /ポート/.test(l) && !/モジュール/.test(l);
+  });
   if (sfpRow) {
     const cm = nk(sfpRow.value).match(/(\d+)/);
     const isPlus = /SFP\+/i.test(nk(sfpRow.label));
