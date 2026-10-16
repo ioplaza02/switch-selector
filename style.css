@@ -390,3 +390,63 @@ details[open] > .filter-group__label::before { transform: rotate(90deg); }
 .compare-modal__head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; padding-right: 40px; }
 .compare-modal__head h2, .compare-modal__scroll .compare-modal__head h2 { margin: 0; }
 .compare-modal__head .share-area { margin-left: 0; }
+
+/* =====================================================================
+   リッチ化（2026-10-16）：カードの浮遊感・表示アニメーション・ホバー
+   見た目だけの変更。HTML・JavaScript・機能には手を入れていない。
+   ===================================================================== */
+:root {
+  --ease-out: cubic-bezier(.2, .8, .2, 1);
+  --float-1: 0 1px 2px rgba(60, 40, 20, .05), 0 6px 16px rgba(60, 40, 20, .07);
+  --float-2: 0 4px 10px rgba(60, 40, 20, .07), 0 24px 44px rgba(60, 40, 20, .16);
+}
+@keyframes swCardIn { from { opacity: 0; transform: translateY(28px) scale(.97); } to { opacity: 1; transform: none; } }
+
+.product-grid { gap: 18px; padding-top: 4px; }
+.product-card {
+  position: relative;
+  border-radius: 16px;
+  box-shadow: var(--float-1);
+  transition: transform .35s var(--ease-out), box-shadow .35s var(--ease-out), border-color .3s;
+  animation: swCardIn .6s var(--ease-out) backwards;
+}
+/* 上から順番に、少しずつ遅れて浮かび上がる */
+.product-card:nth-child(2)  { animation-delay: .06s; }
+.product-card:nth-child(3)  { animation-delay: .12s; }
+.product-card:nth-child(4)  { animation-delay: .18s; }
+.product-card:nth-child(5)  { animation-delay: .24s; }
+.product-card:nth-child(6)  { animation-delay: .30s; }
+.product-card:nth-child(7)  { animation-delay: .36s; }
+.product-card:nth-child(8)  { animation-delay: .42s; }
+.product-card:nth-child(n+9) { animation-delay: .48s; }
+
+.product-card:hover {
+  transform: translateY(-8px) scale(1.015);
+  box-shadow: var(--float-2);
+  border-color: #e8b98f;
+  z-index: 2;
+}
+.product-card--selected { box-shadow: 0 0 0 1px var(--accent), var(--float-1); }
+.product-card--selected:hover { box-shadow: 0 0 0 1px var(--accent), 0 24px 44px rgba(15, 110, 86, .22); border-color: var(--accent); }
+
+/* 商品写真も少しだけ持ち上がる */
+.product-card__image { transition: transform .4s var(--ease-out); }
+.product-card:hover .product-card__image { transform: translateY(-3px) scale(1.08) rotate(-2deg); }
+
+/* 比較トレイと比較表も、ふわっと出る */
+@keyframes swPop { from { opacity: 0; transform: translateY(20px) scale(.98); } to { opacity: 1; transform: none; } }
+.compare-modal__inner { animation: swPop .4s var(--ease-out); }
+.compare-tray { z-index: 5; box-shadow: 0 -2px 6px rgba(60, 40, 20, .04), 0 10px 30px rgba(60, 40, 20, .12); }
+.compare-tray button { transition: transform .2s var(--ease-out), box-shadow .2s, background .2s; }
+.compare-tray button:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(15, 110, 86, .25); }
+
+/* 動きを減らす設定のパソコンでは、アニメーションを止める */
+@media (prefers-reduced-motion: reduce) {
+  .product-card, .product-card__image, .compare-modal__inner { animation: none !important; transition: none !important; }
+  .product-card:hover { transform: none; }
+}
+/* タッチ操作のスマホでは、タップ後に浮いたまま残らないようにする */
+@media (hover: none) {
+  .product-card:hover { transform: none; box-shadow: var(--float-1); }
+  .product-card:hover .product-card__image { transform: none; }
+}
