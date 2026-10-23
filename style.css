@@ -505,3 +505,25 @@ details[open] > .filter-group__label::before { transform: rotate(90deg); }
   .print-sheet .compare-footnote { font-size: 7.5pt; margin-top: 6px; }
   .ps-foot-note { margin: 8px 0 0; font-size: 7pt; line-height: 1.7; color: #8a8880; }
 }
+
+/* =====================================================================
+   帯の「【社内限定】」と「お問い合わせ先」（2026-10-23）
+   NASセレクターなど、ほかのセレクターと同じ並び（左に【社内限定】、右に問い合わせ先）。
+   この帯は明るいアプリコット色なので、NASの黄色文字・白抜きのままだと読みにくい。
+   そのため、文字色だけ帯に合わせて濃いオレンジ茶色にしている。
+   ===================================================================== */
+.brand-banner__internal {
+  color: #b3470c; font-size: 20px; font-weight: 800; letter-spacing: .06em; white-space: nowrap;
+}
+.brand-banner__contact {
+  margin-left: auto; white-space: nowrap;
+  color: #5b2c0a; font-size: 15px; font-weight: 800; letter-spacing: .04em;
+  background: rgba(255, 255, 255, .72); border: 1.5px solid #d99e68;
+  padding: 9px 22px; border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(150, 80, 20, .18);
+}
+@media (max-width: 760px) {
+  .brand-banner__internal { font-size: 16px; }
+  .brand-banner__contact { margin-left: 0; font-size: 13px; padding: 6px 14px; }
+}
+@media print { .brand-banner__internal, .brand-banner__contact { display: none; } }
